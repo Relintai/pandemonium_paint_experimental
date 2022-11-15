@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/paint/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/paint/plugin.cfg", "res://addons/paint_canvas/plugin.cfg" )
 
 [physics]
 

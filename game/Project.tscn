@@ -5,7 +5,7 @@
 
 [node name="PaintProject" type="PaintProject"]
 size = Vector2i( 128, 128 )
-current_color = Color( 0.511169, 0.141401, 0.0907945, 1 )
+current_color = Color( 0.254063, 0.387148, 0.290244, 1 )
 script = ExtResource( 2 )
 
 [node name="PaintCanvas" type="PaintCanvas" parent="."]

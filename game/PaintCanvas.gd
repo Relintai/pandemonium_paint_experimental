@@ -4,7 +4,12 @@ extends PaintCanvas
 var _mouse_down : bool = false
 
 func draw(local_position : Vector2) -> void:
-	set_pixel(local_position.x, local_position.y, Color(1, 1, 1, 1))
+	var proj : PaintProject = get_paint_project()
+	
+	if !proj:
+		print("!proj!")
+	
+	set_pixel(local_position.x, local_position.y, proj.current_color)
 
 func is_local(var pos : Vector2) -> bool:
 	if pos.x < 0 || pos.y < 0 || pos.x > size.x || pos.y > size.y:

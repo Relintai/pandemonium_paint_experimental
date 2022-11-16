@@ -52,6 +52,7 @@ func handle_mouse_button_down(local_position : Vector2, event: InputEvent) -> vo
 		var arr : Array = Array()
 		arr.push_back(cell_mouse_position)
 		arr.push_back(last_cell_mouse_position)
+		#STORE color here
 		arr.push_back(get_current_color())
 	elif current_tool == COLORPICKER:
 		print("TODO")

@@ -20,10 +20,10 @@ func _enter_tree() -> void:
 	
 	#get_tree().connect("node_removed", self, "on_node_removed")
 	
-	var paint_editor_plugin : EditorPlugin = Engine.get_global("PaintEditorPlugin")
-	
-	if paint_editor_plugin:
-		var sidebar : PaintSidebar = paint_editor_plugin.get_sidebar()
+#	var paint_editor_plugin : EditorPlugin = Engine.get_global("PaintEditorPlugin")
+#
+#	if paint_editor_plugin:
+#		var sidebar : PaintSidebar = paint_editor_plugin.get_sidebar()
 		
 		#print(sidebar)
 
@@ -31,9 +31,9 @@ func _exit_tree() -> void:
 	if ip:
 		remove_inspector_plugin(ip)
 	
-	var paint_editor_plugin : EditorPlugin = Engine.get_global("PaintEditorPlugin")
-	
-	if paint_editor_plugin:
-		var sidebar : PaintSidebar = paint_editor_plugin.get_sidebar()
+#	var paint_editor_plugin : EditorPlugin = Engine.get_global("PaintEditorPlugin")
+#
+#	if paint_editor_plugin:
+#		var sidebar : PaintSidebar = paint_editor_plugin.get_sidebar()
 		
 		#print(sidebar)

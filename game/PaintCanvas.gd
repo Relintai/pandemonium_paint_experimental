@@ -42,10 +42,10 @@ func handle_mouse_button_down(local_position : Vector2, event: InputEvent) -> vo
 		last_mouse_position = mouse_position
 		last_cell_mouse_position = local_position
 		
-	if current_tool == CUT:
+	if current_tool == TOOL_CUT:
 		if !event.is_pressed():
 			commit_action()
-	elif current_tool == BUCKET:
+	elif current_tool == TOOL_BUCKET:
 		if !_current_action:
 			_current_action = get_action()
 			
@@ -54,11 +54,11 @@ func handle_mouse_button_down(local_position : Vector2, event: InputEvent) -> vo
 		arr.push_back(last_cell_mouse_position)
 		#STORE color here
 		arr.push_back(get_current_color())
-	elif current_tool == COLORPICKER:
+	elif current_tool == TOOL_COLORPICKER:
 		print("TODO")
-	elif current_tool == PASTECUT:
+	elif current_tool == TOOL_PASTECUT:
 		print("TODO")
-	elif current_tool == PAINT:
+	elif current_tool == TOOL_PENCIL:
 		tool_process(local_position, event)
 		
 
@@ -78,7 +78,7 @@ func commit_action() -> void:
 	_actions_history.push_back(_current_action)
 	_redo_history.clear()
 	
-	if current_tool == CUT:
+	if current_tool == TOOL_CUT:
 		print("TODO")
 		return
 		
@@ -93,7 +93,7 @@ func has_point(var pos : Vector2) -> bool:
 func get_action() -> PaintAction:
 	var action : PaintAction = null
 	
-	if current_tool == PAINT:
+	if current_tool == TOOL_PENCIL:
 		action = PencilAction.new()
 		
 	if action:
@@ -102,7 +102,7 @@ func get_action() -> PaintAction:
 	return action
 
 func _on_tool_changed() -> void:
-	if current_tool == COLORPICKER:
+	if current_tool == TOOL_COLORPICKER:
 		if _current_action:
 			_current_action = null
 		return
@@ -110,13 +110,13 @@ func _on_tool_changed() -> void:
 	_current_action = get_action()
 
 func tool_process(local_position : Vector2, event: InputEvent) -> void:
-	if current_tool == COLORPICKER:
+	if current_tool == TOOL_COLORPICKER:
 		return
 	
 	if !_current_action:
 		_current_action = get_action()
 		
-	if current_tool == PAINT:
+	if current_tool == TOOL_PENCIL:
 		var arr : Array = Array()
 		arr.push_back(cell_mouse_position)
 		arr.push_back(last_cell_mouse_position)

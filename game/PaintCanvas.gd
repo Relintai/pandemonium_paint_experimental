@@ -77,6 +77,7 @@ func commit_action() -> void:
 	
 	_actions_history.push_back(_current_action)
 	_redo_history.clear()
+	update_textures()
 	
 	if current_tool == TOOL_CUT:
 		print("TODO")

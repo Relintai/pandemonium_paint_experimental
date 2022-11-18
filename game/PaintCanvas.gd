@@ -334,9 +334,7 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	if !_current_action:
 		_current_action = get_action()
 		
-	if current_tool == TOOL_PENCIL || current_tool == TOOL_LINE || \
-		current_tool == TOOL_RECT || current_tool == TOOL_DARKEN || \
-		current_tool == TOOL_BRIGHTEN || current_tool == TOOL_LINE:
+	if current_tool == TOOL_PENCIL || current_tool == TOOL_LINE || current_tool == TOOL_RECT:
 			
 		var arr : Array = Array()
 		
@@ -347,6 +345,15 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 			arr.push_back(get_current_color())
 		elif _mouse_button_down == BUTTON_RIGHT:
 			arr.push_back(Color(1, 1, 1, 0))
+		
+		do_action(arr)
+	elif current_tool == TOOL_DARKEN || current_tool == TOOL_BRIGHTEN || current_tool == TOOL_CUT:
+			
+		var arr : Array = Array()
+		
+		arr.push_back(cell_mouse_position)
+		arr.push_back(last_cell_mouse_position)
+		arr.push_back(get_current_color())
 		
 		do_action(arr)
 	elif current_tool == TOOL_BRUSH:

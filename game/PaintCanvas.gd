@@ -58,8 +58,8 @@ func handle_mouse_button_down(local_position : Vector2, event: InputEvent) -> vo
 		print("TODO")
 	elif current_tool == TOOL_PASTECUT:
 		print("TODO")
-	elif current_tool == TOOL_PENCIL:
-		tool_process(local_position, event)
+
+	tool_process(local_position, event)
 		
 
 func do_action(arr : Array) -> void:

@@ -28,7 +28,7 @@ size = Vector2( 32, 32 )
 
 [node name="PaintProject" type="PaintProject"]
 size = Vector2i( 128, 128 )
-current_color = Color( 0.658824, 0.313726, 0.207843, 1 )
+current_color = Color( 0.00784314, 0.835294, 0.564706, 1 )
 color_presets = PoolColorArray( 0.67914, 0.117493, 0.0852439, 1, 0.129412, 0.113725, 0.384314, 1, 0.0666667, 0.796078, 0.196078, 1, 0.0666667, 0.796078, 0.196078, 1, 0.964706, 0.992157, 0.121569, 1, 0.00784314, 0.835294, 0.564706, 1, 0.0666667, 0.796078, 0.196078, 1, 0.658824, 0.313726, 0.207843, 1 )
 script = ExtResource( 2 )
 
@@ -48,4 +48,5 @@ script = ExtResource( 3 )
 
 [node name="PaintCanvas" type="PaintCanvas" parent="."]
 size = Vector2i( 128, 128 )
+brush_size = 12
 script = ExtResource( 1 )

@@ -116,6 +116,53 @@ func handle_right_mouse_button_down(local_position : Vector2, event: InputEvent)
 
 	tool_process(local_position, event)
 
+func draw_brush_preview() -> void:
+	clear_preview()
+	
+	if current_tool == TOOL_PASTECUT:
+#		for (int idx = 0; idx < _selection_cells.size(); ++idx) {
+#			Vector2i pixel = _selection_cells[idx];
+#			//if pixel.x < 0 || pixel.y < 0:
+#			//	print(pixel);
+#			Color color = _selection_colors[idx];
+#			pixel -= _cut_pos + _cut_size / 2;
+#			pixel += cell_mouse_position;
+#			paint_canvas->_set_pixel_v(paint_canvas->tool_layer, pixel, color);
+#		}
+		for idx in range(_selection_cells.size()):
+			var pixel : Vector2i = _selection_cells[idx];
+			var color : Color = _selection_colors[idx];
+			pixel -= _cut_pos + _cut_size / 2;
+			pixel.x += cell_mouse_position.x;
+			pixel.y += cell_mouse_position.y;
+			set_preview_pixel_v(pixel, color)
+			
+		update_textures()
+	elif current_tool == TOOL_BRUSH:
+#			PoolVector2iArray pixels = BrushPrefabs::get_brush(selected_brush_prefab, brush_size_slider->get_value());
+#
+#			PoolVector2iArray::Read r = pixels.read();
+#
+#			for (int i = 0; i < pixels.size(); ++i) {
+#				Vector2i pixel = r[i];
+#				paint_canvas->_set_pixel(paint_canvas->tool_layer, cell_mouse_position.x + pixel.x, cell_mouse_position.y + pixel.y, _selected_color);
+#				//print_error("ad " + String::num(cell_mouse_position.x + pixel.x) + " " + String::num(cell_mouse_position.y + pixel.y));
+#			}
+#
+#			r.release();
+			
+		update_textures()
+	elif current_tool == TOOL_RAINBOW:
+		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, Color(0.46875, 0.446777, 0.446777, 0.3));
+		update_textures()
+	elif current_tool == TOOL_COLORPICKER:
+		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, Color(0.866667, 0.847059, 0.847059, 0.3));
+		update_textures()
+	else:
+		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, get_current_color());
+		update_textures()
+
+
 #void PaintWindow::_draw_tool_brush() {
 #	paint_canvas->tool_layer->clear();
 #
@@ -156,53 +203,8 @@ func handle_right_mouse_button_down(local_position : Vector2, event: InputEvent)
 #	}
 #
 #	paint_canvas->update();
-#	//TODO add here brush prefab drawing
-#	//	paint_canvas->tool_layer->update_texture();
 #}
 
-
-#void PaintWindow::_handle_cut() {
-#	if (Input::get_singleton()->is_mouse_button_pressed(BUTTON_RIGHT)) {
-#		paint_canvas->clear_preview_layer();
-#		set_brush(_previous_tool);
-#		return;
-#	}
-#
-#	if (Input::get_singleton()->is_mouse_button_pressed(BUTTON_LEFT)) {
-#		PoolVector2iArray pixels = PaintUtilities::get_pixels_in_line(cell_mouse_position, last_cell_mouse_position);
-#
-#		PoolVector2iArray::Read r = pixels.read();
-#		for (int i = 0; i < pixels.size(); ++i) {
-#			Vector2i pixel_pos = r[i];
-#
-#			for (int idx = 0; idx < _selection_cells.size(); ++idx) {
-#				Vector2i pixel = _selection_cells[idx];
-#				Color color = _selection_colors[idx];
-#				pixel -= _cut_pos + _cut_size / 2;
-#				pixel += pixel_pos;
-#				paint_canvas->set_pixel_v(pixel, color);
-#			}
-#		}
-#
-#		r.release();
-#	} else {
-#		if (_last_preview_draw_cell_pos == cell_mouse_position) {
-#			return;
-#		}
-#
-#		paint_canvas->clear_preview_layer();
-#
-#		for (int idx = 0; idx < _selection_cells.size(); ++idx) {
-#			Vector2i pixel = _selection_cells[idx];
-#			Color color = _selection_colors[idx];
-#			pixel -= _cut_pos + _cut_size / 2;
-#			pixel += cell_mouse_position;
-#			paint_canvas->set_preview_pixel_v(pixel, color);
-#		}
-#
-#		_last_preview_draw_cell_pos = cell_mouse_position;
-#	}
-#}
 
 func do_action(arr : Array) -> void:
 	if !_current_action:
@@ -418,6 +420,8 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 				_mouse_down = true
 				_mouse_button_down = event.button_index
 				
+				clear_preview()
+				
 				if _mouse_button_down == BUTTON_LEFT:
 					handle_left_mouse_button_down(local_position, event)
 				elif _mouse_button_down == BUTTON_RIGHT:
@@ -427,7 +431,7 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 
 	if event is InputEventMouseMotion:
 		var local_position : Vector2 = get_local_mouse_position()
-		
+
 		mouse_position = get_global_mouse_position()
 		cell_mouse_position = local_position
 		
@@ -444,6 +448,8 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 				last_cell_mouse_position = local_position
 				
 				return true
+		else:
+			draw_brush_preview()
 				
 		last_mouse_position = mouse_position
 		last_cell_mouse_position = local_position

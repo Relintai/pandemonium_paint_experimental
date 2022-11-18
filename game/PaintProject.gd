@@ -12,8 +12,6 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 
-# UNdo redo keybinds + undo redo tool buttons for PaintCanvas
-
 # add button that ads bg and visual grid, also should set owner so they get saved
 # canvas bg make it not use shader
 # inherit both from PaintNode -> automatic easy resize

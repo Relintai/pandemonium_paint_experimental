@@ -16,15 +16,13 @@ var _selection_colors : PoolColorArray
 var _cut_pos : Vector2i
 var _cut_size : Vector2i
 
-var mouse_position : Vector2
-#var canvas_position : Vector2
-var canvas_mouse_position : Vector2
-var cell_mouse_position : Vector2
+var _mouse_position : Vector2
+var _canvas_mouse_position : Vector2
+var _cell_mouse_position : Vector2
 
-var last_mouse_position : Vector2
-#var last_canvas_position : Vector2
-var last_canvas_mouse_position : Vector2
-var last_cell_mouse_position : Vector2
+var _last_mouse_position : Vector2
+var _last_canvas_mouse_position : Vector2
+var _last_cell_mouse_position : Vector2
 
 func handle_draw(local_position : Vector2, event: InputEvent) -> void:
 	var proj : PaintProject = get_paint_project()
@@ -43,13 +41,16 @@ func get_current_color() -> Color:
 	
 	return proj.current_color
 
-func handle_left_mouse_button_down(local_position : Vector2, event: InputEvent) -> void:
+func update_mouse_position(local_position : Vector2, event: InputEvent) -> void:
 	if event.device == -1:
-		mouse_position = get_global_mouse_position()
-		cell_mouse_position = local_position
+		_mouse_position = get_global_mouse_position()
+		_cell_mouse_position = local_position
 		
-		last_mouse_position = mouse_position
-		last_cell_mouse_position = local_position
+		_last_mouse_position = _mouse_position
+		_last_cell_mouse_position = local_position
+
+func handle_left_mouse_button_down(local_position : Vector2, event: InputEvent) -> void:
+	update_mouse_position(local_position, event)
 		
 	if current_tool == TOOL_CUT:
 		if !event.is_pressed():
@@ -59,14 +60,14 @@ func handle_left_mouse_button_down(local_position : Vector2, event: InputEvent) 
 			_current_action = get_action()
 			
 		var arr : Array = Array()
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
+		arr.push_back(_cell_mouse_position)
+		arr.push_back(_last_cell_mouse_position)
 		arr.push_back(get_current_color())
 		
 		do_action(arr)
 		commit_action()
 	elif current_tool == TOOL_COLORPICKER:
-		var c : Color = get_pixel(cell_mouse_position.x, cell_mouse_position.y);
+		var c : Color = get_pixel(_cell_mouse_position.x, _cell_mouse_position.y);
 
 		if (c.a < 0.00001):
 			return;
@@ -82,11 +83,11 @@ func handle_left_mouse_button_down(local_position : Vector2, event: InputEvent) 
 
 func handle_left_mouse_button_up(local_position : Vector2, event: InputEvent) -> void:
 	if event.device == -1:
-		mouse_position = get_global_mouse_position()
-		cell_mouse_position = local_position
+		_mouse_position = get_global_mouse_position()
+		_cell_mouse_position = local_position
 		
-		last_mouse_position = mouse_position
-		last_cell_mouse_position = local_position
+		_last_mouse_position = _mouse_position
+		_last_cell_mouse_position = local_position
 		
 	if current_tool == TOOL_COLORPICKER:
 		if (_picked_color):
@@ -96,12 +97,7 @@ func handle_left_mouse_button_up(local_position : Vector2, event: InputEvent) ->
 	tool_process(local_position, event)
 
 func handle_right_mouse_button_down(local_position : Vector2, event: InputEvent) -> void:
-	if event.device == -1:
-		mouse_position = get_global_mouse_position()
-		cell_mouse_position = local_position
-		
-		last_mouse_position = mouse_position
-		last_cell_mouse_position = local_position
+	update_mouse_position(local_position, event)
 		
 	if current_tool == TOOL_CUT:
 		if !event.is_pressed():
@@ -133,8 +129,8 @@ func draw_brush_preview() -> void:
 			var pixel : Vector2i = _selection_cells[idx];
 			var color : Color = _selection_colors[idx];
 			pixel -= _cut_pos + _cut_size / 2;
-			pixel.x += cell_mouse_position.x;
-			pixel.y += cell_mouse_position.y;
+			pixel.x += _cell_mouse_position.x;
+			pixel.y += _cell_mouse_position.y;
 			set_preview_pixel_v(pixel, color)
 			
 		update_textures()
@@ -153,13 +149,13 @@ func draw_brush_preview() -> void:
 			
 		update_textures()
 	elif current_tool == TOOL_RAINBOW:
-		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, Color(0.46875, 0.446777, 0.446777, 0.3));
+		set_preview_pixel(_cell_mouse_position.x, _cell_mouse_position.y, Color(0.46875, 0.446777, 0.446777, 0.3));
 		update_textures()
 	elif current_tool == TOOL_COLORPICKER:
-		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, Color(0.866667, 0.847059, 0.847059, 0.3));
+		set_preview_pixel(_cell_mouse_position.x, _cell_mouse_position.y, Color(0.866667, 0.847059, 0.847059, 0.3));
 		update_textures()
 	else:
-		set_preview_pixel(cell_mouse_position.x, cell_mouse_position.y, get_current_color());
+		set_preview_pixel(_cell_mouse_position.x, _cell_mouse_position.y, get_current_color());
 		update_textures()
 
 
@@ -368,8 +364,8 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	if current_tool == TOOL_PENCIL || current_tool == TOOL_LINE || current_tool == TOOL_RECT:
 		var arr : Array = Array()
 		
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
+		arr.push_back(_cell_mouse_position)
+		arr.push_back(_last_cell_mouse_position)
 		
 		if _mouse_button_down == BUTTON_LEFT:
 			arr.push_back(get_current_color())
@@ -380,16 +376,16 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	elif current_tool == TOOL_DARKEN || current_tool == TOOL_BRIGHTEN || current_tool == TOOL_CUT:
 		var arr : Array = Array()
 		
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
+		arr.push_back(_cell_mouse_position)
+		arr.push_back(_last_cell_mouse_position)
 		arr.push_back(get_current_color())
 		
 		do_action(arr)
 	elif current_tool == TOOL_BRUSH:
 		var arr : Array = Array()
 		
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
+		arr.push_back(_cell_mouse_position)
+		arr.push_back(_last_cell_mouse_position)
 		
 		if _mouse_button_down == BUTTON_LEFT:
 			arr.push_back(get_current_color())
@@ -406,8 +402,8 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	elif current_tool == TOOL_PASTECUT:
 		var arr : Array = Array()
 
-		arr.append(cell_mouse_position);
-		arr.append(last_cell_mouse_position);
+		arr.append(_cell_mouse_position);
+		arr.append(_last_cell_mouse_position);
 		arr.append(_selection_cells);
 		arr.append(_selection_colors);
 		arr.append(_cut_pos);
@@ -417,8 +413,8 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	elif current_tool == TOOL_RAINBOW:
 		var arr : Array = Array()
 		
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
+		arr.push_back(_cell_mouse_position)
+		arr.push_back(_last_cell_mouse_position)
 		
 		do_action(arr)
 
@@ -464,27 +460,27 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 	if event is InputEventMouseMotion:
 		var local_position : Vector2 = get_local_mouse_position()
 
-		mouse_position = get_global_mouse_position()
-		cell_mouse_position = local_position
+		_mouse_position = get_global_mouse_position()
+		_cell_mouse_position = local_position
 		
 		if _mouse_down:
 			if has_point(local_position):
 				#handle_draw(local_position, event)
-				cell_mouse_position = local_position
+				_cell_mouse_position = local_position
 				
 				tool_process(local_position, event)
 				update_textures()
 				update()
 				
-				last_mouse_position = mouse_position
-				last_cell_mouse_position = local_position
+				_last_mouse_position = _mouse_position
+				_last_cell_mouse_position = local_position
 				
 				return true
 		else:
 			draw_brush_preview()
 				
-		last_mouse_position = mouse_position
-		last_cell_mouse_position = local_position
+		_last_mouse_position = _mouse_position
+		_last_cell_mouse_position = local_position
 	
 	if event is InputEventKey:
 		if event.echo || !event.pressed:

@@ -111,6 +111,8 @@ func handle_right_mouse_button_down(local_position : Vector2, event: InputEvent)
 	elif current_tool == TOOL_PASTECUT:
 		commit_action()
 		current_tool = TOOL_PENCIL
+	elif current_tool == TOOL_BUCKET:
+		current_tool = get_previous_tool()
 
 	tool_process(local_position, event)
 

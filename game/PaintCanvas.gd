@@ -205,7 +205,6 @@ func draw_brush_preview() -> void:
 #	paint_canvas->update();
 #}
 
-
 func do_action(arr : Array) -> void:
 	if !_current_action:
 		return
@@ -237,9 +236,41 @@ func commit_action() -> void:
 		
 		current_tool = TOOL_PASTECUT
 
-		return
-		
 	_current_action = null
+
+func redo_action() -> void:
+	if (_redo_history.empty()):
+		print("PaintCanvas: nothing to redo");
+		return;
+
+	var action : PaintAction = _redo_history[_redo_history.size() - 1];
+	_redo_history.remove(_redo_history.size() - 1);
+
+	if (!action):
+		return;
+
+	_actions_history.push_back(action);
+	action.redo_action();
+	update_textures()
+
+	print("PaintCanvas: redo action");
+
+func undo_action() -> void:
+	if (_actions_history.empty()):
+		print("PaintCanvas: nothing to undo");
+		return;
+
+	var action : PaintAction = _actions_history[_actions_history.size() - 1];
+	_actions_history.remove(_actions_history.size() - 1);
+
+	if (!action):
+		return;
+
+	_redo_history.push_back(action);
+	action.undo_action();
+	update_textures()
+	
+	print("PaintCanvas: undo action")
 
 #void PaintWindow::redo_action_old() {
 #	if (_redo_history.empty()) {
@@ -260,6 +291,7 @@ func commit_action() -> void:
 #
 #	//print("redo action");
 #}
+
 #void PaintWindow::undo_action_old() {
 #	if (_actions_history.empty()) {
 #		return;
@@ -453,6 +485,34 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 				
 		last_mouse_position = mouse_position
 		last_cell_mouse_position = local_position
+	
+	if event is InputEventKey:
+		if event.echo || !event.pressed:
+			return false
+			
+		var scancode : int = event.get_physical_scancode_with_modifiers()
+		
+		var undo : bool = false
+		if (scancode == (KEY_Z | KEY_MASK_CTRL)):
+			undo = true
+			
+		var redo : bool = false
+		if (scancode == (KEY_Z | KEY_MASK_CTRL | KEY_MASK_SHIFT)):
+			redo = true
+			
+		if !undo && !redo:
+			return false
+		
+		var local_position : Vector2 = get_local_mouse_position()
+		
+		if has_point(local_position):
+			if redo:
+				redo_action()
+				return true
+				
+			if undo:
+				undo_action()
+				return true
 
 	return false
 

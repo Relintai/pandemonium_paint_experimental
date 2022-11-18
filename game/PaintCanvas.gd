@@ -95,6 +95,24 @@ func get_action() -> PaintAction:
 	
 	if current_tool == TOOL_PENCIL:
 		action = PencilAction.new()
+	elif current_tool == TOOL_BRUSH:
+		action = BrushAction.new()
+	elif current_tool == TOOL_LINE:
+		action = LineAction.new()
+	elif current_tool == TOOL_RAINBOW:
+		action = RainbowAction.new()
+	elif current_tool == TOOL_BUCKET:
+		action = BucketAction.new()
+	elif current_tool == TOOL_RECT:
+		action = RectAction.new()
+	elif current_tool == TOOL_DARKEN:
+		action = DarkenAction.new()
+	elif current_tool == TOOL_BRIGHTEN:
+		action = BrightenAction.new()
+	elif current_tool == TOOL_CUT:
+		action = CutAction.new()
+	elif current_tool == TOOL_PASTECUT:
+		action = PasteCutAction.new()
 		
 	if action:
 		action.paint_canvas = self
@@ -116,14 +134,70 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	if !_current_action:
 		_current_action = get_action()
 		
-	if current_tool == TOOL_PENCIL:
+	if current_tool == TOOL_PENCIL || current_tool == TOOL_LINE || \
+		current_tool == TOOL_RECT || current_tool == TOOL_DARKEN || \
+		current_tool == TOOL_BRIGHTEN || current_tool == TOOL_LINE:
+			
 		var arr : Array = Array()
+		
 		arr.push_back(cell_mouse_position)
 		arr.push_back(last_cell_mouse_position)
 		arr.push_back(get_current_color())
 		
 		do_action(arr)
-	
+	elif current_tool == TOOL_BRUSH:
+		var arr : Array = Array()
+		
+		arr.push_back(cell_mouse_position)
+		arr.push_back(last_cell_mouse_position)
+		arr.push_back(get_current_color())
+		arr.push_back(brush_prefab)
+		arr.push_back(brush_size)
+		
+		do_action(arr)
+	elif current_tool == TOOL_COLORPICKER:
+		pass
+	elif current_tool == TOOL_PASTECUT:
+#		Array arr;
+#
+#		arr.append(cell_mouse_position);
+#		arr.append(last_cell_mouse_position);
+#		arr.append(_selection_cells);
+#		arr.append(_selection_colors);
+#		arr.append(_cut_pos);
+#		arr.append(_cut_size);
+#
+#		do_action_old(arr);
+		pass
+	elif current_tool == TOOL_RAINBOW:
+		var arr : Array = Array()
+		
+		arr.push_back(cell_mouse_position)
+		arr.push_back(last_cell_mouse_position)
+		
+		do_action(arr)
+		
+		
+	#RIGHTCLICK
+#	case Tools::PAINT: {
+#		Array arr;
+#
+#		arr.append(cell_mouse_position);
+#		arr.append(last_cell_mouse_position);
+#		arr.append(Color(1, 1, 1, 0));
+#
+#		do_action_old(arr);
+#	} break;
+#	case Tools::BRUSH: {
+#		Array arr;
+#
+#		arr.append(cell_mouse_position);
+#		arr.append(last_cell_mouse_position);
+#		arr.append(Color(1, 1, 1, 0));
+#		arr.append(selected_brush_prefab);
+#		arr.append(brush_size_slider->get_value());
+#
+#		do_action_old(arr);
 
 func _forward_canvas_gui_input(event: InputEvent) -> bool:
 	if event is InputEventMouseButton:

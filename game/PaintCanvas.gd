@@ -318,12 +318,9 @@ func _on_tool_changed() -> void:
 		if _current_action:
 			_current_action = null
 		return
-		
+	
 	if get_previous_tool() == TOOL_CUT:
 		clear_preview()
-	elif get_previous_tool() == TOOL_PASTECUT:
-		_selection_cells.resize(0);
-		_selection_colors.resize(0);
 	
 	_current_action = get_action()
 
@@ -335,7 +332,6 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 		_current_action = get_action()
 		
 	if current_tool == TOOL_PENCIL || current_tool == TOOL_LINE || current_tool == TOOL_RECT:
-			
 		var arr : Array = Array()
 		
 		arr.push_back(cell_mouse_position)
@@ -348,7 +344,6 @@ func tool_process(local_position : Vector2, event: InputEvent) -> void:
 		
 		do_action(arr)
 	elif current_tool == TOOL_DARKEN || current_tool == TOOL_BRIGHTEN || current_tool == TOOL_CUT:
-			
 		var arr : Array = Array()
 		
 		arr.push_back(cell_mouse_position)

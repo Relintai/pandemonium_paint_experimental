@@ -61,8 +61,10 @@ func handle_left_mouse_button_down(local_position : Vector2, event: InputEvent) 
 		var arr : Array = Array()
 		arr.push_back(cell_mouse_position)
 		arr.push_back(last_cell_mouse_position)
-		#STORE color here
 		arr.push_back(get_current_color())
+		
+		do_action(arr)
+		commit_action()
 	elif current_tool == TOOL_COLORPICKER:
 		var c : Color = get_pixel(cell_mouse_position.x, cell_mouse_position.y);
 
@@ -104,16 +106,6 @@ func handle_right_mouse_button_down(local_position : Vector2, event: InputEvent)
 	if current_tool == TOOL_CUT:
 		if !event.is_pressed():
 			commit_action()
-	elif current_tool == TOOL_BUCKET:
-		if !_current_action:
-			_current_action = get_action()
-			
-		var arr : Array = Array()
-		arr.push_back(cell_mouse_position)
-		arr.push_back(last_cell_mouse_position)
-		arr.push_back(get_current_color())
-		
-		do_action(arr)
 	elif current_tool == TOOL_COLORPICKER:
 		current_tool = get_previous_tool()
 	elif current_tool == TOOL_PASTECUT:
@@ -331,8 +323,7 @@ func _on_tool_changed() -> void:
 		_selection_cells.resize(0);
 		_selection_colors.resize(0);
 	
-	if get_previous_tool() != TOOL_BUCKET:
-		_current_action = get_action()
+	_current_action = get_action()
 
 func tool_process(local_position : Vector2, event: InputEvent) -> void:
 	if current_tool == TOOL_COLORPICKER:

@@ -514,8 +514,8 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 
 func _ready() -> void:
 	#temp
-	resize(1, 1)
-	resize(128, 128)
+	#resize(1, 1)
+	#resize(128, 128)
 	
 	if !is_connected("current_tool_changed", self, "_on_tool_changed"):
 		connect("current_tool_changed", self, "_on_tool_changed")

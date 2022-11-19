@@ -1,40 +1,24 @@
 tool
 extends PaintProject
 
-
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# add button that ads bg and visual grid, also should set owner so they get saved
-# canvas bg make it not use shader
-# inherit both from PaintNode -> automatic easy resize
-
-# Implement trickle down resize -> PAitnProject resized -> NOTIFICATION PAINT PROJECT RESIZED!
-
-# PaintNode -> current size property read only
-# Resize property + resize button
-
-# Mouse pos for the canvas property inspector
+# PaintCanvas -> save data in a compressed form ? -> this is probably the best
+# lz4 -> add lz4 module, remove multiple lz4 implementations
 
 # PaintProj -> Collect and merge and save -> NOTIF PaintProject PRE Save , then get image()
 # should be saved virtual! only true for canvas for now
+# Should apply transforms aswell -> different projects could be put together using scene instancing
 
-# PaintCanvas -> LoadImage
+# PaintProject -> new tool, which is only present when its selected:
+# ExportImage, Load image as new canvas, scale project tool, and add other run properties to it.
 
-# PaintNodes -> Outline property. Maybe keep node?
+# PaintCanvas -> LoadCanvasImage, exportCanvasImage -> TOOL
+# PaintCanvas -> scale tool
+# Mouse pos for the canvas property inspector
 
-# PaintCanvas -> save data in a compressed form
-
-# port back everything to c++
+# Port the inspector plugin to c++ aswell
 
 # remove old deprecated classes
+# inherit both PaintVisualGrid and PaintCanvasBackground from PaintNode -> automatic easy resize
+# Rename the paint project editor which is present for all nodes to PaintNode editor
 
-
-
+# Rename the method that is used to set the inspected PaintNodes in PaintCustomPropertyInspector

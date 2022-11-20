@@ -1,24 +1,29 @@
 tool
 extends PaintProject
 
-# PaintCanvas -> save data in a compressed form ? -> this is probably the best
-# lz4 -> add lz4 module, remove multiple lz4 implementations
-
-# PaintProj -> Collect and merge and save -> NOTIF PaintProject PRE Save , then get image()
-# should be saved virtual! only true for canvas for now
-# Should apply transforms aswell -> different projects could be put together using scene instancing
-
-# PaintProject -> new tool, which is only present when its selected:
-# ExportImage, Load image as new canvas, scale project tool, and add other run properties to it.
-
-# PaintCanvas -> LoadCanvasImage, exportCanvasImage -> TOOL
-# PaintCanvas -> scale tool
-# Mouse pos for the canvas property inspector
-
+# the new tool should not take space when empty
 # Port the inspector plugin to c++ aswell
 
-# remove old deprecated classes
+# remove old deprecated classes (PaintCanvasOutline, PaintColorGrid too)
 # inherit both PaintVisualGrid and PaintCanvasBackground from PaintNode -> automatic easy resize
 # Rename the paint project editor which is present for all nodes to PaintNode editor
 
 # Rename the method that is used to set the inspected PaintNodes in PaintCustomPropertyInspector
+
+# PaintCanvas -> Only consume events if the current tool is select (probably should only route them in the plugin)
+
+# PaintProject Add open image and texture property, if image dragged to it it creates a canvas from it, if no children
+# also adds vis grid, and bg + resizses itself
+
+# New Tools:
+# PaintProject: Load image as new canvas, with proper gui
+# PaintProject: Scale project ? (to px, or percent) (set scale for all sub nodes?) Might not work well, or just not like this
+# PaintCanvas: Pixel Scale canvas, should be able to set interpolation (just need gui)
+# PaintCanvas -> LoadCanvasImage, exportCanvasImage -> TOOL
+# Mouse pos for the canvas property inspector
+# PaintProject: Move run properties to the inspector.
+# PaintProject: ExportImage -> dialog instead of text field # + run property. Can keel the field to save path though
+
+# Eventually:
+# Filters, vectors ...
+

@@ -14,7 +14,7 @@ func parse_begin(object: Object) -> void:
 		ptool.on_paint_node_selected(object)
 		add_custom_control(ptool)
 		
-	if object is PaintProject:
-		var pct : PaintProjectToolsPropertyInspector = PaintProjectToolsPropertyInspector.new()
-		pct.on_paint_node_selected(object)
-		add_custom_control(pct)
+	#if object is PaintProject:
+	#	var pct : PaintProjectToolsPropertyInspector = PaintProjectToolsPropertyInspector.new()
+	#	pct.on_paint_node_selected(object)
+	#	add_custom_control(pct)

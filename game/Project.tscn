@@ -9,12 +9,10 @@ color_presets = PoolColorArray( 0.67914, 0.117493, 0.0852439, 1, 0.129412, 0.113
 script = ExtResource( 2 )
 
 [node name="PaintCanvasBackground" type="PaintCanvasBackground" parent="."]
-margin_right = 128.0
-margin_bottom = 128.0
+size = Vector2i( 128, 128 )
 
 [node name="PaintVisualGrid" type="PaintVisualGrid" parent="."]
-margin_right = 128.0
-margin_bottom = 128.0
+size = Vector2i( 128, 128 )
 
 [node name="PaintCanvas" type="PaintCanvas" parent="."]
 size = Vector2i( 128, 128 )
